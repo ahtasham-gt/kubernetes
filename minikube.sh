@@ -23,10 +23,6 @@ sudo systemctl enable docker
 # Add user to docker group
 sudo usermod -aG docker $USER
 
-# Step 6: Reload group permissions
-echo "[6/7] Applying Docker group permissions..."
-newgrp docker
-
 # Step 4: Install kubectl
 echo "[4/7] Installing kubectl..."
 curl -LO "https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -39,14 +35,15 @@ curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-
 chmod +x minikube-linux-amd64
 sudo mv minikube-linux-amd64 /usr/local/bin/minikube
 
-
-
+# Step 6: Reload group permissions
+echo "[6/7] Applying Docker group permissions..."
+newgrp docker <<EONG
 
 # Step 7: Start Minikube
 echo "[7/7] Starting Minikube using Docker driver..."
 minikube start --driver=docker
 
-
+EONG
 
 echo "=============================================="
 echo "     Minikube Installation Completed! 🚀      "
